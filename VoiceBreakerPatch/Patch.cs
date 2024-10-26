@@ -21,7 +21,7 @@ public static class VoiceBreakerPatch
 
     static readonly ConcurrentDictionary<Player, int> ExploitMessages = [];
     static readonly HashSet<Player> BannedPlayers = [];
-    
+
     static readonly float[] Buffer = new float[480];
 
     public static bool Prefix(NetworkConnection conn, ref VoiceMessage msg)
@@ -30,7 +30,7 @@ public static class VoiceBreakerPatch
         {
             if (msg.Speaker == null || conn.identity.netId != msg.Speaker.netId)
                 return false;
-            
+
             int length = Decoder.Decode(msg.Data, msg.DataLength, Buffer);
             if (length != 480) return false;
 
@@ -39,7 +39,8 @@ public static class VoiceBreakerPatch
 
             if (maxVolume > 1)
             {
-                var speaker = Player.Get(msg.Speaker);
+                Player speaker = Player.Get(msg.Speaker);
+
                 if (maxVolume > 100 && !speaker.IsTransmitting)
                 {
                     RecordExploitAttempt(speaker);
@@ -62,6 +63,7 @@ public static class VoiceBreakerPatch
     static void RecordExploitAttempt(Player player)
     {
         int exploitAttempts = ExploitMessages.AddOrUpdate(player, 1, (_, count) => count + 1);
+
         if (exploitAttempts >= 10)
         {
             if (Plugin.Instance.Config.BanForVoiceExploit && BannedPlayers.Add(player))
@@ -75,7 +77,9 @@ public static class VoiceBreakerPatch
     static void ScaleSamples(float[] samples, float scale)
     {
         for (var i = 0; i < samples.Length; i++)
+        {
             samples[i] *= scale;
+        }
     }
 
     static byte[] Encode(float[] samples)

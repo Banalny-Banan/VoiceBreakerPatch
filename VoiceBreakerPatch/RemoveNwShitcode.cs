@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using NorthwoodLib.Pools;
@@ -7,8 +6,7 @@ using VoiceChat.Networking;
 
 namespace VoiceBreakerPatch;
 
-[Obfuscation(Exclude = true),
- HarmonyPatch(typeof(VoiceTransceiver), nameof(VoiceTransceiver.ServerReceiveMessage))]
+[HarmonyPatch(typeof(VoiceTransceiver), nameof(VoiceTransceiver.ServerReceiveMessage))]
 internal static class RemoveNwShitcode
 {
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
