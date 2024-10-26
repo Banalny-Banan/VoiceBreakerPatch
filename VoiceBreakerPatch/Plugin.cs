@@ -9,7 +9,7 @@ public class Plugin : Plugin<Config>
     public override string Prefix => "VoiceBreakerPatch";
     public override string Name => Prefix;
     public override string Author => "BanalnyBanan";
-    public override Version Version { get; } = new (1, 0, 0);
+    public override Version Version { get; } = new (1, 1, 0);
     
     static readonly Harmony Harmony = new ("VoiceBreakerPatch");
     public static Plugin Instance;
